@@ -1,0 +1,56 @@
+[
+  {
+    "title": "Ramka Aktywna (Baza)",
+    "hex": "#8b5cf6",
+    "rgb": "rgb(139, 92, 246)",
+    "comment": "Hyprland: Główny kolor aktywnego okna"
+  },
+  {
+    "title": "Ramka Aktywna (Gradient)",
+    "hex": "#a855f7",
+    "rgb": "rgb(168, 85, 247)",
+    "comment": "Hyprland: Drugi kolor do przejścia pod kątem 45 stopni"
+  },
+  {
+    "title": "Ramka Nieaktywna",
+    "hex": "#2e1065",
+    "rgb": "rgb(46, 16, 101)",
+    "comment": "Hyprland: Kolor okien w tle"
+  },
+  {
+    "title": "Cień Okna",
+    "hex": "#1a1a1a",
+    "rgb": "rgb(26, 26, 26)",
+    "comment": "Hyprland: Ciemny szary używany w renderowaniu cieni"
+  },
+  {
+    "title": "Mroczna Śliwka",
+    "hex": "#110A1A",
+    "rgb": "rgb(17, 10, 26)",
+    "comment": "Tło główne Rofi i Waybara"
+  },
+  {
+    "title": "Jasna Śliwka",
+    "hex": "#1E122D",
+    "rgb": "rgb(30, 18, 45)",
+    "comment": "Tło aktywnych elementów i pasków wyszukiwania"
+  },
+  {
+    "title": "Wróżkowy Pył",
+    "hex": "#E2D6F5",
+    "rgb": "rgb(226, 214, 245)",
+    "comment": "Główny kolor tekstu"
+  },
+  {
+    "title": "Fuksja Draculaury",
+    "hex": "#D926A9",
+    "rgb": "rgb(217, 38, 169)",
+    "comment": "Mocny akcent do zaznaczeń i przycisków"
+  },
+  {
+    "title": "Magiczny Fiolet",
+    "hex": "#7E22CE",
+    "rgb": "rgb(126, 34, 206)",
+    "comment": "Grube ramki zwoju Rofi i granice Waybara"
+  }
+]
