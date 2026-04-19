@@ -260,6 +260,8 @@
             return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0').toUpperCase();
         }
 
+        let activeColorElement = null;
+
         async function loadColors() {
             const res = await fetch('/api/colors');
             const colors = await res.json();
@@ -270,9 +272,11 @@
                 const col = document.createElement('div');
                 col.className = 'color-col';
                 col.style.backgroundColor = c.hex;
+                col.setAttribute('data-db-hex', c.hex); 
                 
                 col.onclick = () => {
-                    const currentHex = col.getAttribute('data-current-hex') || c.hex;
+                    activeColorElement = col; 
+                    const currentHex = col.getAttribute('data-current-hex') || col.getAttribute('data-db-hex');
                     const currentRgb = hexToRgb(currentHex);
                     copyToClipboard(currentHex, currentRgb);
                 };
@@ -283,14 +287,8 @@
                 
                 circle.onclick = (e) => {
                     e.stopPropagation();
-                    const newHex = getRandomHex();
-                    const newRgb = hexToRgb(newHex);
-                    
-                    col.style.backgroundColor = newHex;
-                    col.setAttribute('data-current-hex', newHex);
-                    
-                    const valsDiv = col.querySelector('.color-values');
-                    valsDiv.textContent = `${newHex} • ${newRgb}`;
+                    activeColorElement = col; 
+                    randomizeElementColor(col);
                 };
                 
                 const info = document.createElement('div');
@@ -304,6 +302,32 @@
                 vals.className = 'color-values';
                 vals.textContent = `${c.hex.toUpperCase()} • ${c.rgb}`;
                 
+                vals.oncontextmenu = async (e) => {
+                    e.preventDefault(); 
+                    e.stopPropagation();
+                    
+                    const newHexInput = prompt("Podaj nowy HEX (np. #FF00FF):", col.getAttribute('data-db-hex'));
+                    
+                    if (newHexInput && /^#[0-9A-F]{6}$/i.test(newHexInput.trim())) {
+                        const validHex = newHexInput.trim().toUpperCase();
+                        const validRgb = hexToRgb(validHex);
+                        
+                        await fetch('/api/colors/update', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                title: c.title,
+                                new_hex: validHex,
+                                new_rgb: validRgb
+                            })
+                        });
+                        
+                        loadColors(); 
+                    } else if (newHexInput) {
+                        alert("Błędny format HEX! Użyj formatu #RRGGBB.");
+                    }
+                };
+
                 const comment = document.createElement('div');
                 comment.className = 'color-comment';
                 comment.textContent = c.comment;
@@ -317,6 +341,27 @@
                 container.appendChild(col);
             });
         }
+
+        function randomizeElementColor(element) {
+            if(!element) return;
+            const newHex = getRandomHex();
+            const newRgb = hexToRgb(newHex);
+            
+            element.style.backgroundColor = newHex;
+            element.setAttribute('data-current-hex', newHex);
+            
+            const valsDiv = element.querySelector('.color-values');
+            valsDiv.textContent = `${newHex} • ${newRgb}`;
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space' && event.target.tagName !== 'INPUT') {
+                event.preventDefault(); 
+                if(activeColorElement) {
+                    randomizeElementColor(activeColorElement);
+                }
+            }
+        });
 
         async function addColor() {
             const title = document.getElementById('title').value;
